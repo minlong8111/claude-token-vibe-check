@@ -5,13 +5,16 @@ import { TokenUsage } from './types';
 export function parseJsonlLine(line: string, projectName: string): TokenUsage | null {
   try {
     const obj = JSON.parse(line);
-    if (!obj.usage || !obj.model) return null;
+    const msg = obj.message || obj;
+    const usage = msg.usage || obj.usage;
+    const model = msg.model || obj.model;
+    if (!usage || !model) return null;
     return {
-      inputTokens: obj.usage.input_tokens || 0,
-      outputTokens: obj.usage.output_tokens || 0,
-      cacheCreationTokens: obj.usage.cache_creation_input_tokens || 0,
-      cacheReadTokens: obj.usage.cache_read_input_tokens || 0,
-      model: obj.model,
+      inputTokens: usage.input_tokens || 0,
+      outputTokens: usage.output_tokens || 0,
+      cacheCreationTokens: usage.cache_creation_input_tokens || 0,
+      cacheReadTokens: usage.cache_read_input_tokens || 0,
+      model,
       timestamp: new Date(obj.timestamp || Date.now()).getTime(),
       sessionId: obj.sessionId || obj.session_id || 'unknown',
       projectName

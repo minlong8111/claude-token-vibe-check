@@ -1,17 +1,25 @@
 import * as vscode from 'vscode';
 import { getWebviewContent } from './webview';
-import { DailyUsage, SessionUsage, BudgetStatus } from '../types';
+import { UsageSummary, DailyUsage, HourlyUsage, SessionUsage, ProjectUsage, BudgetStatus } from '../types';
 
 let panel: vscode.WebviewPanel | undefined;
+let refreshFn: (() => any) | undefined;
 
-export function openDashboard(context: vscode.ExtensionContext, data: {
+interface DashboardData {
   dailyUsages: DailyUsage[];
+  hourlyUsages: HourlyUsage[];
   sessions: SessionUsage[];
+  projects: ProjectUsage[];
+  monthSummary: UsageSummary;
+  allTimeSummary: UsageSummary;
   budgetStatuses: BudgetStatus[];
-  totalCostAllTime: number;
-}) {
+  initialTab?: string;
+}
+
+export function openDashboard(data: DashboardData, onRefresh?: () => any) {
+  if (onRefresh) refreshFn = onRefresh;
+
   if (panel) {
-    panel.reveal();
     panel.webview.html = getWebviewContent(data);
     return;
   }
@@ -20,19 +28,28 @@ export function openDashboard(context: vscode.ExtensionContext, data: {
     'claudeBudgetDashboard',
     'Claude Budget Monitor',
     vscode.ViewColumn.One,
-    { enableScripts: true }
+    { enableScripts: true, retainContextWhenHidden: true }
   );
 
   panel.webview.html = getWebviewContent(data);
+
+  panel.webview.onDidReceiveMessage(message => {
+    if (message.command === 'refresh' && refreshFn) {
+      try {
+        const newData = refreshFn();
+        if (newData && panel) {
+          panel.webview.html = getWebviewContent(newData);
+        }
+      } catch (err) {
+        console.error('Dashboard refresh error:', err);
+      }
+    }
+  });
+
   panel.onDidDispose(() => { panel = undefined; });
 }
 
-export function updateDashboard(data: {
-  dailyUsages: DailyUsage[];
-  sessions: SessionUsage[];
-  budgetStatuses: BudgetStatus[];
-  totalCostAllTime: number;
-}) {
+export function updateDashboard(data: DashboardData) {
   if (panel) {
     panel.webview.html = getWebviewContent(data);
   }

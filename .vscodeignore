@@ -1,6 +1,9 @@
 src/
 node_modules/
 out/
-docs/
+.vscode/
+.git/
 .gitignore
 tsconfig.json
+*.ts
+!dist/

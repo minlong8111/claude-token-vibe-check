@@ -1,37 +1,36 @@
 {
-  "name": "claude-budget-monitor",
-  "displayName": "Claude Budget Monitor",
+  "name": "claude-usage-tracker",
+  "displayName": "Claude Usage Tracker",
   "description": "Monitor Claude Code usage, costs, and budget alerts in VS Code",
-  "version": "0.1.0",
-  "publisher": "your-publisher-name",
+  "version": "0.2.0",
+  "publisher": "minlong8111",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/minlong8111/claude-budget-monitor"
+  },
+  "keywords": ["claude", "budget", "cost", "monitor", "token", "usage", "ai"],
   "engines": {
     "vscode": "^1.85.0"
   },
   "categories": [
-    "Visualization"
+    "Visualization",
+    "Other"
   ],
   "main": "./dist/extension.js",
+  "activationEvents": ["onStartupFinished"],
   "contributes": {
     "commands": [
-      {
-        "command": "claudeBudget.openDashboard",
-        "title": "Claude Budget: Open Dashboard"
-      },
-      {
-        "command": "claudeBudget.setDailyBudget",
-        "title": "Claude Budget: Set Daily Budget"
-      },
-      {
-        "command": "claudeBudget.setWeeklyBudget",
-        "title": "Claude Budget: Set Weekly Budget"
-      },
-      {
-        "command": "claudeBudget.setMonthlyBudget",
-        "title": "Claude Budget: Set Monthly Budget"
-      }
+      { "command": "claudeBudget.openDashboard", "title": "Claude Tracker: Open Dashboard" },
+      { "command": "claudeBudget.setDailyBudget", "title": "Claude Tracker: Set Daily Budget" },
+      { "command": "claudeBudget.setWeeklyBudget", "title": "Claude Tracker: Set Weekly Budget" },
+      { "command": "claudeBudget.setMonthlyBudget", "title": "Claude Tracker: Set Monthly Budget" },
+      { "command": "claudeBudget.setProjectBudget", "title": "Claude Tracker: Set Project Budget" },
+      { "command": "claudeBudget.pauseAlerts", "title": "Claude Tracker: Pause Alerts" },
+      { "command": "claudeBudget.resetBudget", "title": "Claude Tracker: Reset All Budgets" }
     ],
     "configuration": {
-      "title": "Claude Budget Monitor",
+      "title": "Claude Usage Tracker",
       "properties": {
         "claudeBudget.refreshInterval": {
           "type": "number",
@@ -64,7 +63,12 @@
           "default": 80,
           "minimum": 1,
           "maximum": 100,
-          "description": "Alert at this % of budget"
+          "description": "First alert threshold % (default 80%)"
+        },
+        "claudeBudget.projectBudgets": {
+          "type": "object",
+          "default": {},
+          "description": "Per-project budget limits, e.g. {\"my-app\": 50, \"backend\": 30}"
         },
         "claudeBudget.timezone": {
           "type": "string",

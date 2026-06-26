@@ -10,6 +10,7 @@ export function getConfig() {
     monthlyBudget: cfg.get<number>('monthlyBudget', 0),
     alertThreshold: cfg.get<number>('alertThreshold', 80),
     timezone: cfg.get<string>('timezone', ''),
+    projectBudgets: cfg.get<Record<string, number>>('projectBudgets', {}),
   };
 }
 
