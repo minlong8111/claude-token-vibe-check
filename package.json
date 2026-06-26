@@ -20,7 +20,7 @@
     "ai"
   ],
   "engines": {
-    "vscode": "^1.125.0"
+    "vscode": "^1.75.0"
   },
   "categories": [
     "Visualization",
@@ -117,7 +117,7 @@
   },
   "devDependencies": {
     "@types/node": "^26.0.1",
-    "@types/vscode": "^1.125.0",
+    "@types/vscode": "^1.75.0",
     "esbuild": "^0.28.1",
     "typescript": "^6.0.3"
   }
