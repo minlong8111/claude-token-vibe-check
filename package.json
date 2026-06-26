@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/minlong8111/claude-budget-monitor"
+    "url": "https://github.com/minlong8111/claude-usage-tracker"
   },
   "keywords": ["claude", "budget", "cost", "monitor", "token", "usage", "ai"],
   "engines": {
